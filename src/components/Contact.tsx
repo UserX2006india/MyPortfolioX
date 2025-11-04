@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Linkedin, Instagram, Github, Mail, Download } from "lucide-react";
@@ -21,6 +22,12 @@ export const Contact = () => {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [emailRevealed, setEmailRevealed] = useState(false);
+  const [emailFormData, setEmailFormData] = useState({
+    contact_number: "",
+    email: ""
+  });
   const { data: profile } = useQuery({
     queryKey: ["profile-data"],
     queryFn: async () => {
@@ -60,6 +67,38 @@ export const Contact = () => {
       toast.error("Failed to send message. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleEmailRevealSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!emailFormData.contact_number.trim() || !emailFormData.email.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailFormData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("contact_messages")
+        .insert([{
+          name: "Email Request",
+          email: emailFormData.email,
+          message: `Contact Number: ${emailFormData.contact_number}`
+        }]);
+
+      if (error) throw error;
+
+      setEmailRevealed(true);
+      setShowEmailDialog(false);
+      toast.success("Email revealed! Thank you for sharing your details.");
+    } catch (error) {
+      toast.error("Failed to process request. Please try again.");
     }
   };
   return <section id="contact" className="py-20 px-6 bg-secondary/30">
@@ -107,13 +146,65 @@ export const Contact = () => {
             <Card className="glass border-none">
               <CardContent className="pt-6">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5" />
-                    <a href="mailto:govindofficials06@gmail.com" className="hover:text-accent transition-colors">govindkumarkharbade@gmail.com</a>
-                  </div>
+                  {emailRevealed ? (
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-5 h-5" />
+                      <a href="mailto:govindkumarkharbade@gmail.com" className="hover:text-accent transition-colors">
+                        govindkumarkharbade@gmail.com
+                      </a>
+                    </div>
+                  ) : (
+                    <Button 
+                      onClick={() => setShowEmailDialog(true)} 
+                      className="w-full glass"
+                      variant="outline"
+                    >
+                      <Mail className="w-4 h-4 mr-2" />
+                      Get My Email
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
+
+            <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+              <DialogContent className="glass">
+                <DialogHeader>
+                  <DialogTitle>Get Email Address</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleEmailRevealSubmit} className="space-y-4">
+                  <div>
+                    <Input
+                      type="tel"
+                      placeholder="Your Contact Number"
+                      value={emailFormData.contact_number}
+                      onChange={(e) => setEmailFormData({
+                        ...emailFormData,
+                        contact_number: e.target.value
+                      })}
+                      required
+                      className="glass"
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="email"
+                      placeholder="Your Email"
+                      value={emailFormData.email}
+                      onChange={(e) => setEmailFormData({
+                        ...emailFormData,
+                        email: e.target.value
+                      })}
+                      required
+                      className="glass"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full glass">
+                    Submit & Get Email
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
 
             <Card className="glass border-none">
               <CardContent className="pt-6">

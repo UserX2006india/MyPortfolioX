@@ -13,7 +13,7 @@ export const Hero = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("cv_url")
+        .select("cv_url, profile_image_url, full_name, tagline")
         .single();
       if (error) throw error;
       return data;
@@ -89,9 +89,10 @@ export const Hero = () => {
           <div className="relative animate-slide-up">
             <div className="relative">
               <img 
-                src={heroImage} 
-                alt="Govind Kharbade" 
-                className="w-full h-auto rounded-3xl"
+                src={profile?.profile_image_url || heroImage} 
+                alt={profile?.full_name || "Govind Kharbade"} 
+                className="w-full h-auto rounded-3xl object-cover"
+                style={{ maxHeight: '600px' }}
               />
               <div className="absolute bottom-10 left-10 bg-foreground text-background rounded-full w-32 h-32 flex items-center justify-center">
                 <span className="text-2xl font-light">Hello</span>

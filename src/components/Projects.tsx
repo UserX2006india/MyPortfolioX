@@ -52,20 +52,26 @@ export const Projects = () => {
               </div>
               <CardContent className="p-6 space-y-4">
                 <div>
-                  <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
-                  <p className="text-muted-foreground">{project.description}</p>
+                  <h3 className="text-2xl font-bold mb-2 group-hover:text-primary transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-muted-foreground line-clamp-3">{project.description}</p>
                 </div>
                 {project.tags && project.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag, i) => (
-                      <span key={i} className="text-xs px-3 py-1 rounded-full bg-secondary">
+                      <span key={i} className="text-xs px-3 py-1 rounded-full bg-secondary/60 backdrop-blur-sm">
                         {tag}
                       </span>
                     ))}
                   </div>
                 )}
                 {project.project_url && (
-                  <Button variant="outline" className="glass w-full" asChild>
+                  <Button 
+                    variant="outline" 
+                    className="glass w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all" 
+                    asChild
+                  >
                     <a href={project.project_url} target="_blank" rel="noopener noreferrer">
                       View Project
                       <ExternalLink className="w-4 h-4 ml-2" />

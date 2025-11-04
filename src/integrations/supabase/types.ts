@@ -14,7 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      experience: {
+        Row: {
+          company: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          duration: string
+          id: string
+          job_title: string
+        }
+        Insert: {
+          company: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          duration: string
+          id?: string
+          job_title: string
+        }
+        Update: {
+          company?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          duration?: string
+          id?: string
+          job_title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          cv_url: string | null
+          email: string
+          full_name: string | null
+          id: string
+          profile_image_url: string | null
+          social_links: Json | null
+          tagline: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          cv_url?: string | null
+          email: string
+          full_name?: string | null
+          id: string
+          profile_image_url?: string | null
+          social_links?: Json | null
+          tagline?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          cv_url?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          profile_image_url?: string | null
+          social_links?: Json | null
+          tagline?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          media_type: string | null
+          media_url: string
+          project_url: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          media_type?: string | null
+          media_url: string
+          project_url?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          media_type?: string | null
+          media_url?: string
+          project_url?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon_name: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon_name?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon_name?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

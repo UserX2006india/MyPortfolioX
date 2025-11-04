@@ -99,7 +99,7 @@ All colors MUST be HSL.
     overflow-x: hidden;
   }
 
-  /* Soft pastel blur background - inspired by reference */
+  /* Intense multicolor blur background */
   body::before {
     content: '';
     position: fixed;
@@ -108,13 +108,14 @@ All colors MUST be HSL.
     width: 120%;
     height: 120%;
     background: 
-      radial-gradient(ellipse at 10% 20%, rgba(147, 197, 253, 0.3) 0%, transparent 50%),
-      radial-gradient(ellipse at 90% 70%, rgba(196, 181, 253, 0.25) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 80%, rgba(251, 207, 232, 0.3) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 10%, rgba(254, 240, 138, 0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 30% 50%, rgba(165, 180, 252, 0.2) 0%, transparent 50%);
-    filter: blur(100px);
-    opacity: 0.8;
+      radial-gradient(ellipse at 10% 20%, rgba(147, 197, 253, 0.55) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 70%, rgba(196, 181, 253, 0.50) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(251, 207, 232, 0.55) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 10%, rgba(254, 240, 138, 0.45) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 50%, rgba(165, 180, 252, 0.45) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 40%, rgba(252, 165, 165, 0.40) 0%, transparent 50%);
+    filter: blur(80px);
+    opacity: 1;
     z-index: -1;
     animation: rainbow-float 25s ease-in-out infinite alternate;
   }

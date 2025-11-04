@@ -13,6 +13,7 @@ import { ExperienceManager } from "@/components/admin/ExperienceManager";
 import { ProjectManager } from "@/components/admin/ProjectManager";
 import { ProfileImageManager } from "@/components/admin/ProfileImageManager";
 import { CVManager } from "@/components/admin/CVManager";
+import { SocialLinksManager } from "@/components/admin/SocialLinksManager";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ const Admin = () => {
             <TabsTrigger value="experience">Experience</TabsTrigger>
             <TabsTrigger value="profile">Profile Image</TabsTrigger>
             <TabsTrigger value="cv">CV Settings</TabsTrigger>
+            <TabsTrigger value="social">Social Links</TabsTrigger>
             <TabsTrigger value="messages">Messages</TabsTrigger>
           </TabsList>
 
@@ -73,6 +75,10 @@ const Admin = () => {
 
           <TabsContent value="cv" className="mt-6">
             <CVManager />
+          </TabsContent>
+
+          <TabsContent value="social" className="mt-6">
+            <SocialLinksManager />
           </TabsContent>
 
           <TabsContent value="messages" className="mt-6">

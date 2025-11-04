@@ -7,6 +7,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Linkedin, Instagram, Github, Mail, Download } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+
+interface SocialLinks {
+  linkedin?: string;
+  instagram?: string;
+  github?: string;
+}
+
 export const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -14,17 +21,18 @@ export const Contact = () => {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const {
-    data: profile
-  } = useQuery({
-    queryKey: ["profile-cv"],
+  const { data: profile } = useQuery({
+    queryKey: ["profile-data"],
     queryFn: async () => {
-      const {
-        data,
-        error
-      } = await supabase.from("profiles").select("cv_url").single();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("cv_url, social_links")
+        .single();
       if (error) throw error;
-      return data;
+      return {
+        cv_url: data.cv_url,
+        social_links: data.social_links as SocialLinks
+      };
     }
   });
   const handleDownloadCV = () => {
@@ -111,21 +119,27 @@ export const Contact = () => {
               <CardContent className="pt-6">
                 <h3 className="font-semibold mb-4">Connect With Me</h3>
                 <div className="flex gap-4">
-                  <Button variant="outline" size="icon" className="glass" asChild>
-                    <a href="#" target="_blank" rel="noopener noreferrer">
-                      <Linkedin className="w-5 h-5" />
-                    </a>
-                  </Button>
-                  <Button variant="outline" size="icon" className="glass" asChild>
-                    <a href="#" target="_blank" rel="noopener noreferrer">
-                      <Instagram className="w-5 h-5" />
-                    </a>
-                  </Button>
-                  <Button variant="outline" size="icon" className="glass" asChild>
-                    <a href="#" target="_blank" rel="noopener noreferrer">
-                      <Github className="w-5 h-5" />
-                    </a>
-                  </Button>
+                  {profile?.social_links?.linkedin && (
+                    <Button variant="outline" size="icon" className="glass" asChild>
+                      <a href={profile.social_links.linkedin} target="_blank" rel="noopener noreferrer">
+                        <Linkedin className="w-5 h-5" />
+                      </a>
+                    </Button>
+                  )}
+                  {profile?.social_links?.instagram && (
+                    <Button variant="outline" size="icon" className="glass" asChild>
+                      <a href={profile.social_links.instagram} target="_blank" rel="noopener noreferrer">
+                        <Instagram className="w-5 h-5" />
+                      </a>
+                    </Button>
+                  )}
+                  {profile?.social_links?.github && (
+                    <Button variant="outline" size="icon" className="glass" asChild>
+                      <a href={profile.social_links.github} target="_blank" rel="noopener noreferrer">
+                        <Github className="w-5 h-5" />
+                      </a>
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

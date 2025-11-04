@@ -53,56 +53,87 @@ export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProp
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="glass max-w-5xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="glass max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">{project.title}</DialogTitle>
-          <DialogDescription className="text-base mt-2">
+          <DialogTitle className="text-4xl font-bold mb-2">{project.title}</DialogTitle>
+          <DialogDescription className="text-lg">
             {project.description}
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-6 mt-4">
+        <div className="space-y-8 mt-6">
           {/* Main Project Thumbnail */}
-          <div className="aspect-video overflow-hidden rounded-xl bg-muted shadow-lg">
-            <img 
-              src={project.media_url} 
-              alt={project.title}
-              className="w-full h-full object-cover"
-            />
+          <div className="relative">
+            <div className="aspect-video overflow-hidden rounded-2xl bg-muted shadow-2xl border border-border/50">
+              <img 
+                src={project.media_url} 
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
+
+          {/* Tags Section */}
+          {project.tags && project.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {project.tags.map((tag, i) => (
+                <span 
+                  key={i} 
+                  className="text-sm px-4 py-2 rounded-full glass font-medium border border-border/30"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Additional Images Gallery */}
           {hasAdditionalImages && (
-            <div>
-              <h3 className="text-xl font-semibold mb-3">Project Gallery</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <h3 className="text-2xl font-semibold">Project Gallery</h3>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {project.additional_images.map((imageUrl, index) => (
-                  <div key={index} className="aspect-video overflow-hidden rounded-xl bg-muted shadow-md hover:shadow-lg transition-shadow">
+                  <div 
+                    key={index} 
+                    className="group relative aspect-video overflow-hidden rounded-xl bg-muted shadow-lg border border-border/30 hover:shadow-2xl transition-all duration-300"
+                  >
                     <img 
                       src={imageUrl} 
-                      alt={`${project.title} - Image ${index + 1}`}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      alt={`${project.title} - Gallery ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Video Links */}
+          {/* Video Links Section */}
           {hasVideoLinks && (
-            <div>
-              <h3 className="text-xl font-semibold mb-3">Project Videos</h3>
-              <div className="space-y-4">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <h3 className="text-2xl font-semibold">Project Videos</h3>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+              <div className="grid grid-cols-1 gap-6">
                 {project.video_links.map((videoUrl, index) => (
-                  <div key={index} className="aspect-video overflow-hidden rounded-xl bg-muted shadow-lg">
-                    <iframe
-                      src={getEmbedUrl(videoUrl)}
-                      title={`${project.title} - Video ${index + 1}`}
-                      className="w-full h-full border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                  <div key={index} className="space-y-2">
+                    <p className="text-sm text-muted-foreground font-medium">Video {index + 1}</p>
+                    <div className="aspect-video overflow-hidden rounded-xl bg-muted shadow-2xl border border-border/50">
+                      <iframe
+                        src={getEmbedUrl(videoUrl)}
+                        title={`${project.title} - Video ${index + 1}`}
+                        className="w-full h-full border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -111,38 +142,28 @@ export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProp
 
           {/* Legacy Project Video (if project_url is a video) */}
           {showVideo && (
-            <div>
-              <h3 className="text-xl font-semibold mb-3">Project Video</h3>
-              <div className="aspect-video overflow-hidden rounded-xl bg-muted shadow-lg">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <h3 className="text-2xl font-semibold">Featured Video</h3>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+              <div className="aspect-video overflow-hidden rounded-xl bg-muted shadow-2xl border border-border/50">
                 <iframe
                   src={getEmbedUrl(project.project_url)}
-                  title={`${project.title} - Video`}
+                  title={`${project.title} - Featured Video`}
                   className="w-full h-full border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
               </div>
             </div>
           )}
 
-          {/* Tags */}
-          {project.tags && project.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag, i) => (
-                <span 
-                  key={i} 
-                  className="text-sm px-4 py-2 rounded-full glass font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-
           {/* Project Link - Only show if not a video URL */}
           {project.project_url && !showVideo && (
             <Button 
-              className="w-full glass" 
+              className="w-full glass hover:scale-105 transition-transform" 
               size="lg"
               asChild
             >

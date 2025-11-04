@@ -180,12 +180,12 @@ export const ProjectManager = () => {
                   id="additional_images"
                   value={formData.additional_images}
                   onChange={(e) => setFormData({ ...formData, additional_images: e.target.value })}
-                  placeholder="https://images.unsplash.com/photo-1&#10;https://images.unsplash.com/photo-2"
-                  className="glass"
-                  rows={4}
+                  placeholder="https://images.unsplash.com/photo-1&#10;https://images.unsplash.com/photo-2&#10;https://images.unsplash.com/photo-3"
+                  className="glass font-mono text-sm"
+                  rows={5}
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Add multiple project images - one URL per line
+                <p className="text-xs text-muted-foreground mt-2">
+                  💡 Add multiple project images - one URL per line. These will display in a beautiful gallery grid.
                 </p>
               </div>
               <div>
@@ -194,12 +194,12 @@ export const ProjectManager = () => {
                   id="video_links"
                   value={formData.video_links}
                   onChange={(e) => setFormData({ ...formData, video_links: e.target.value })}
-                  placeholder="https://youtube.com/watch?v=...&#10;https://vimeo.com/..."
-                  className="glass"
-                  rows={4}
+                  placeholder="https://youtube.com/watch?v=...&#10;https://vimeo.com/...&#10;https://youtube.com/watch?v=..."
+                  className="glass font-mono text-sm"
+                  rows={5}
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Add YouTube or Vimeo video URLs - one per line
+                <p className="text-xs text-muted-foreground mt-2">
+                  🎥 Add YouTube or Vimeo video URLs - one per line. Videos will auto-embed with full player controls.
                 </p>
               </div>
               <div className="flex gap-2">
@@ -217,19 +217,34 @@ export const ProjectManager = () => {
 
       <div className="space-y-4">
         <h3 className="text-2xl font-bold">Existing Projects</h3>
+        <p className="text-sm text-muted-foreground">
+          Click a project to edit. Each project can have multiple images and videos.
+        </p>
         {projects?.map((project) => (
           <Card key={project.id} className="glass">
             <CardContent className="pt-6">
               <div className="flex justify-between items-start gap-4">
-                <div className="flex-1">
+                <div className="flex-1 space-y-2">
                   <h4 className="text-xl font-bold">{project.title}</h4>
                   <p className="text-muted-foreground text-sm">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    {project.additional_images?.length > 0 && (
+                      <span className="px-2 py-1 rounded bg-secondary/50">
+                        🖼️ {project.additional_images.length} images
+                      </span>
+                    )}
+                    {project.video_links?.length > 0 && (
+                      <span className="px-2 py-1 rounded bg-secondary/50">
+                        🎥 {project.video_links.length} videos
+                      </span>
+                    )}
+                  </div>
                   {project.project_url && (
                     <a 
                       href={project.project_url} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-xs text-primary hover:underline"
+                      className="text-xs text-primary hover:underline inline-block"
                     >
                       {project.project_url}
                     </a>

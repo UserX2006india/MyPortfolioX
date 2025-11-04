@@ -43,7 +43,7 @@ export const Header = () => {
               <span className="font-semibold text-base">Contact me</span>
               <ArrowUpRight className="w-4 h-4" />
             </div>
-            <span className="text-xs text-muted-foreground text-left">govindkumarkharbade@gmail.com</span>
+            <span className="text-xs text-muted-foreground text-left">contact me to decide our next project</span>
           </Button>
         </div>
       </div>

@@ -18,6 +18,8 @@ export const ProjectManager = () => {
     media_url: "",
     project_url: "",
     tags: "",
+    additional_images: "",
+    video_links: "",
   });
 
   const { data: projects, refetch } = useQuery({
@@ -41,6 +43,8 @@ export const ProjectManager = () => {
         media_url: formData.media_url,
         project_url: formData.project_url,
         tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean),
+        additional_images: formData.additional_images.split("\n").map(url => url.trim()).filter(Boolean),
+        video_links: formData.video_links.split("\n").map(url => url.trim()).filter(Boolean),
       };
 
       if (editingId) {
@@ -59,7 +63,7 @@ export const ProjectManager = () => {
         toast.success("Project added!");
         setIsAdding(false);
       }
-      setFormData({ title: "", description: "", media_url: "", project_url: "", tags: "" });
+      setFormData({ title: "", description: "", media_url: "", project_url: "", tags: "", additional_images: "", video_links: "" });
       refetch();
     } catch (error) {
       toast.error("Failed to save project");
@@ -74,6 +78,8 @@ export const ProjectManager = () => {
       media_url: project.media_url,
       project_url: project.project_url || "",
       tags: project.tags?.join(", ") || "",
+      additional_images: project.additional_images?.join("\n") || "",
+      video_links: project.video_links?.join("\n") || "",
     });
     setIsAdding(true);
   };
@@ -92,7 +98,7 @@ export const ProjectManager = () => {
   const handleCancel = () => {
     setIsAdding(false);
     setEditingId(null);
-    setFormData({ title: "", description: "", media_url: "", project_url: "", tags: "" });
+    setFormData({ title: "", description: "", media_url: "", project_url: "", tags: "", additional_images: "", video_links: "" });
   };
 
   return (
@@ -167,6 +173,34 @@ export const ProjectManager = () => {
                   placeholder="UI/UX, Web Design, Branding"
                   className="glass"
                 />
+              </div>
+              <div>
+                <Label htmlFor="additional_images">Additional Images (one URL per line)</Label>
+                <Textarea
+                  id="additional_images"
+                  value={formData.additional_images}
+                  onChange={(e) => setFormData({ ...formData, additional_images: e.target.value })}
+                  placeholder="https://images.unsplash.com/photo-1&#10;https://images.unsplash.com/photo-2"
+                  className="glass"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Add multiple project images - one URL per line
+                </p>
+              </div>
+              <div>
+                <Label htmlFor="video_links">Video Links (one URL per line)</Label>
+                <Textarea
+                  id="video_links"
+                  value={formData.video_links}
+                  onChange={(e) => setFormData({ ...formData, video_links: e.target.value })}
+                  placeholder="https://youtube.com/watch?v=...&#10;https://vimeo.com/..."
+                  className="glass"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Add YouTube or Vimeo video URLs - one per line
+                </p>
               </div>
               <div className="flex gap-2">
                 <Button type="submit" className="glass">

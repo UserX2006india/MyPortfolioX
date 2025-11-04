@@ -109,6 +109,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          additional_images: string[] | null
           created_at: string | null
           description: string | null
           display_order: number | null
@@ -119,8 +120,10 @@ export type Database = {
           tags: string[] | null
           title: string
           updated_at: string | null
+          video_links: string[] | null
         }
         Insert: {
+          additional_images?: string[] | null
           created_at?: string | null
           description?: string | null
           display_order?: number | null
@@ -131,8 +134,10 @@ export type Database = {
           tags?: string[] | null
           title: string
           updated_at?: string | null
+          video_links?: string[] | null
         }
         Update: {
+          additional_images?: string[] | null
           created_at?: string | null
           description?: string | null
           display_order?: number | null
@@ -143,6 +148,7 @@ export type Database = {
           tags?: string[] | null
           title?: string
           updated_at?: string | null
+          video_links?: string[] | null
         }
         Relationships: []
       }

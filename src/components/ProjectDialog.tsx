@@ -16,6 +16,8 @@ interface ProjectDialogProps {
     media_type?: string;
     tags?: string[];
     project_url?: string;
+    additional_images?: string[];
+    video_links?: string[];
   } | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -46,6 +48,8 @@ export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProp
   };
 
   const showVideo = project.project_url && isVideoUrl(project.project_url);
+  const hasAdditionalImages = project.additional_images && project.additional_images.length > 0;
+  const hasVideoLinks = project.video_links && project.video_links.length > 0;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -58,7 +62,7 @@ export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProp
         </DialogHeader>
         
         <div className="space-y-6 mt-4">
-          {/* Project Thumbnail Image */}
+          {/* Main Project Thumbnail */}
           <div className="aspect-video overflow-hidden rounded-xl bg-muted shadow-lg">
             <img 
               src={project.media_url} 
@@ -67,7 +71,45 @@ export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProp
             />
           </div>
 
-          {/* Project Video Embed (if video URL provided) */}
+          {/* Additional Images Gallery */}
+          {hasAdditionalImages && (
+            <div>
+              <h3 className="text-xl font-semibold mb-3">Project Gallery</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {project.additional_images.map((imageUrl, index) => (
+                  <div key={index} className="aspect-video overflow-hidden rounded-xl bg-muted shadow-md hover:shadow-lg transition-shadow">
+                    <img 
+                      src={imageUrl} 
+                      alt={`${project.title} - Image ${index + 1}`}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Video Links */}
+          {hasVideoLinks && (
+            <div>
+              <h3 className="text-xl font-semibold mb-3">Project Videos</h3>
+              <div className="space-y-4">
+                {project.video_links.map((videoUrl, index) => (
+                  <div key={index} className="aspect-video overflow-hidden rounded-xl bg-muted shadow-lg">
+                    <iframe
+                      src={getEmbedUrl(videoUrl)}
+                      title={`${project.title} - Video ${index + 1}`}
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Legacy Project Video (if project_url is a video) */}
           {showVideo && (
             <div>
               <h3 className="text-xl font-semibold mb-3">Project Video</h3>

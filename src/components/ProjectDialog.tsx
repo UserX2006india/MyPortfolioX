@@ -24,9 +24,32 @@ interface ProjectDialogProps {
 export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProps) => {
   if (!project) return null;
 
+  const getEmbedUrl = (url: string) => {
+    // YouTube
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const videoId = url.includes('youtu.be') 
+        ? url.split('youtu.be/')[1]?.split('?')[0]
+        : url.split('v=')[1]?.split('&')[0];
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    }
+    // Vimeo
+    if (url.includes('vimeo.com')) {
+      const videoId = url.split('vimeo.com/')[1]?.split('?')[0];
+      return videoId ? `https://player.vimeo.com/video/${videoId}` : url;
+    }
+    return url;
+  };
+
+  const isVideoUrl = (url: string) => {
+    return url.includes('youtube.com') || url.includes('youtu.be') || 
+           url.includes('vimeo.com') || url.includes('embed');
+  };
+
+  const showVideo = project.project_url && isVideoUrl(project.project_url);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="glass max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="glass max-w-5xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold">{project.title}</DialogTitle>
           <DialogDescription className="text-base mt-2">
@@ -35,23 +58,30 @@ export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProp
         </DialogHeader>
         
         <div className="space-y-6 mt-4">
-          {/* Project Media */}
-          <div className="aspect-video overflow-hidden rounded-xl bg-muted">
-            {project.media_type === "image" || !project.media_type ? (
-              <img 
-                src={project.media_url} 
-                alt={project.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <iframe
-                src={project.media_url}
-                title={project.title}
-                className="w-full h-full"
-                allowFullScreen
-              />
-            )}
+          {/* Project Thumbnail Image */}
+          <div className="aspect-video overflow-hidden rounded-xl bg-muted shadow-lg">
+            <img 
+              src={project.media_url} 
+              alt={project.title}
+              className="w-full h-full object-cover"
+            />
           </div>
+
+          {/* Project Video Embed (if video URL provided) */}
+          {showVideo && (
+            <div>
+              <h3 className="text-xl font-semibold mb-3">Project Video</h3>
+              <div className="aspect-video overflow-hidden rounded-xl bg-muted shadow-lg">
+                <iframe
+                  src={getEmbedUrl(project.project_url)}
+                  title={`${project.title} - Video`}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
 
           {/* Tags */}
           {project.tags && project.tags.length > 0 && (
@@ -67,8 +97,8 @@ export const ProjectDialog = ({ project, open, onOpenChange }: ProjectDialogProp
             </div>
           )}
 
-          {/* Project Link */}
-          {project.project_url && (
+          {/* Project Link - Only show if not a video URL */}
+          {project.project_url && !showVideo && (
             <Button 
               className="w-full glass" 
               size="lg"

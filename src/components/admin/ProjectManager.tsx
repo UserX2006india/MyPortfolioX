@@ -132,24 +132,31 @@ export const ProjectManager = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="media_url">Media URL (Image or YouTube/Vimeo link)</Label>
+                <Label htmlFor="media_url">Project Thumbnail Image URL</Label>
                 <Input
                   id="media_url"
                   value={formData.media_url}
                   onChange={(e) => setFormData({ ...formData, media_url: e.target.value })}
+                  placeholder="https://images.unsplash.com/photo-..."
                   required
                   className="glass"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Main project thumbnail (shown in grid and detail view)
+                </p>
               </div>
               <div>
-                <Label htmlFor="project_url">Project URL (Optional)</Label>
+                <Label htmlFor="project_url">Project/Video URL (Optional)</Label>
                 <Input
                   id="project_url"
                   value={formData.project_url}
                   onChange={(e) => setFormData({ ...formData, project_url: e.target.value })}
-                  placeholder="https://example.com"
+                  placeholder="YouTube/Vimeo URL or live project link"
                   className="glass"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  YouTube: https://youtube.com/watch?v=... | Vimeo: https://vimeo.com/... | Or any live project URL
+                </p>
               </div>
               <div>
                 <Label htmlFor="tags">Tags (comma separated)</Label>

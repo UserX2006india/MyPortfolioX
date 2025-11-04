@@ -12,11 +12,11 @@ import { LogOut } from "lucide-react";
 import { ExperienceManager } from "@/components/admin/ExperienceManager";
 import { ProjectManager } from "@/components/admin/ProjectManager";
 import { ProfileImageManager } from "@/components/admin/ProfileImageManager";
+import { CVManager } from "@/components/admin/CVManager";
 
 const Admin = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [cvUrl, setCvUrl] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -33,26 +33,6 @@ const Admin = () => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/");
-  };
-
-
-  const handleUpdateCV = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
-      const { error } = await supabase
-        .from("profiles")
-        .update({ cv_url: cvUrl })
-        .eq("id", user.id);
-      
-      if (error) throw error;
-      toast.success("CV link updated successfully!");
-      setCvUrl("");
-    } catch (error) {
-      toast.error("Failed to update CV link");
-    }
   };
 
   if (isLoading) {
@@ -92,29 +72,7 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="cv" className="mt-6">
-            <Card className="glass">
-              <CardHeader>
-                <CardTitle>Update CV Link</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleUpdateCV} className="space-y-4">
-                  <div>
-                    <Label htmlFor="cv_url">CV URL (Google Drive, Dropbox, etc.)</Label>
-                    <Input
-                      id="cv_url"
-                      value={cvUrl}
-                      onChange={(e) => setCvUrl(e.target.value)}
-                      placeholder="https://drive.google.com/file/d/..."
-                      required
-                      className="glass"
-                    />
-                  </div>
-                  <Button type="submit" className="glass">
-                    Update CV Link
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+            <CVManager />
           </TabsContent>
 
           <TabsContent value="messages" className="mt-6">

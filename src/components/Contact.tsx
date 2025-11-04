@@ -5,7 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Linkedin, Instagram, Github, Mail } from "lucide-react";
+import { Linkedin, Instagram, Github, Mail, Download } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,26 @@ export const Contact = () => {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile-cv"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("cv_url")
+        .single();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const handleDownloadCV = () => {
+    if (profile?.cv_url) {
+      window.open(profile.cv_url, "_blank");
+    } else {
+      toast.error("CV not available");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,7 +152,13 @@ export const Contact = () => {
             <Card className="glass border-none">
               <CardContent className="pt-6">
                 <h3 className="font-semibold mb-3">Download CV</h3>
-                <Button variant="outline" className="glass w-full">
+                <Button 
+                  variant="outline" 
+                  className="glass w-full"
+                  onClick={handleDownloadCV}
+                  disabled={!profile?.cv_url}
+                >
+                  <Download className="w-4 h-4 mr-2" />
                   Download Resume
                 </Button>
               </CardContent>
